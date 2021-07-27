@@ -1,0 +1,46 @@
+{%extends 'base.html'%}
+
+{%block title%}
+{{news_detail.title}}
+{%endblock%}
+
+{% block content %}
+<font size=6>  {{news_detail.title}} </font>
+<br>
+{{news_detail.text}}
+<br>
+<img src={{news_detail.img}}>
+<br>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<a class="btn btn-default" href="{% url 'news_delete' pk=news_detail.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+<a class="btn btn-default" href="{% url 'news_edit' pk=news_detail.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+
+
+
+{% with comments.count as total_comments %}
+    <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+{% endwith %}
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }} </p>
+        {{ comment.body|linebreaks }}
+    </div>
+{% empty %}
+    <p>There are no comments yet.</p>
+{% endfor %}
+
+{% if new_comment %}
+    <h2>Your comment has been added.</h2>
+{% else %}
+    <h2>Add a new comment</h2>
+    <form action="." method="POST">
+        {{ comment_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Add comment"></p>
+    </form>
+{% endif %}
+{% endblock %}

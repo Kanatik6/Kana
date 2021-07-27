@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+
+{%block title%}
+Новости    
+{%endblock%}
+    {% block content %}
+  {%for one_tag in all_tags%}
+  <a href="{% url 'news_by_tag' pk=one_tag.pk %}">{{one_tag.name}}</a>
+  <br>
+  <!-- в хреф нужно передавать имя из url которое мы задали -->
+  {%endfor%}
+
+
+    <center>
+    {% for one_news in all_news %}
+
+    <!-- тут можно использовать range() чтоюы по 3 в лайне -->
+    <div class="card" style="width: 23rem;">
+        <img src="{{one_news.img}}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">{{one_news.title}}</h5>
+          <p class="card-text">{{one_news.text}}</p>
+          <a href="{% url 'news_detail' pk=one_news.pk %}" class="btn btn-primary">Читать полностью</a>
+        </div>    
+    {% endfor %}
+</div></center>
+
+{%endblock%}
